@@ -1,0 +1,185 @@
+FORMAT: 1A
+HOST: http://bustop.apiblueprint.org/
+
+# Bustop
+
+Bustop api allows clients to log into app, list lines, passengers, register lines tracking
+
+# Group Connection
+
+## Authentication for device [/auth]
+
+### POST
+
++ Request (application/json)
+    + Attributes
+        + imei (number)
+        
++ Response 200 (application/json)        
+
+        {
+        
+            "token": <token>,
+        }
++ Response 406 (application/json)
+
+        {
+            "message":<errors>
+        }
+        
+## Check Authentication of the device [/]
+
+### GET 
++ Request (application/json)
++ Response 200 (application/json)
+
+        {
+            "message": "Bustop",
+            "status": "Connected"
+        }
+        
+# Group Lists
+
+## List Passengers [/passengers/{line}]
++ Request Headers
+        + x-access-token: <token>
+
++ Parameters
+    + line - Id of the line required
+
+### GET
+
++ Response 200 (application/json)
+    + Attributes
+        + passengers (array[Passenger])
+
++ Response 406 (application/json)
+
+        {
+            "warning":<warning>
+        }
+
+## List Lines [/lines]
+
+### GET
++ Request Headers
+
+        + x-access-token: <token>
+        
++ Request
+    + Attributes
+        + clients (array[string]) - Id of the client 
+
++ Response 200 (application/json)
+    + Attributes
+        + lines (array[Line])
+
++ Response 406 (application/json)
+
+        {
+            "warning":<warning>
+        }
+
+#Group Store
+
+## Store passengers [/passengers]
+    
+### POST
+
++ Request Headers
+
+        + x-access-token: <token>
+        
++ Request (application/json)
+    + Attributes
+        + passengers (array[Passenger])
+        
++ Response 200 (application/json)
+
+        {
+            "success":"Salvo"
+        }
+        
++ Response 406 (application/json)
+
+        {
+            "message":<errors>
+        }
+
+#Group Tracking
+
+## Localization [/locale/{line}]
+        
+### POST
++ Request Headers
+
+        + x-access-token: <token>
++ Parameters
+    + line - Id of the line locale
++ Request (application/json)
+    + Attributes
+        + locale (Route)
+        
++ Response 200 (application/json)
+
+        {
+            "success":"Salvo"
+        }
+        
++ Response 406 (application/json)
+
+        {
+            "message":<errors>
+        }
+
+## Line state [/line-state]
+
+### PUT
++ Request Headers
+
+        + x-access-token: <token>
++ Request (application/json)
+    + Attributes
+        + state (LineState)    
+        
++ Response 200 (application/json)
+
+        {
+            "success":"Salvo"
+        }
+        
++ Response 406 (application/json)
+
+        {
+            "message":<errors>
+        }
+
+# Data Structures
+
+## LineState (object)
++ id (string)
++ status (number)
+
+
+## Passenger (object)
++ id (string)
++ name (string)
++ cpf (string)
++ avatar (string)
+
+## Route (object)
++ lat (number)
++ lng  (number)
+
+
+## Waypoint (object)
++ location (Route)
++ stopover (boolean)
+
+## Line (object)
++ id (string)
++ short_description (string)
++ long_description (string)
++ route_destiny (Route)
++ route_origin (Route)
++ waypoints (array[Waypoint])
