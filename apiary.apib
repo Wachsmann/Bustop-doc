@@ -82,7 +82,7 @@ Bustop api allows clients to log into app, list lines, passengers, register line
 
 #Group Store
 
-## Store passengers [/passengers]
+## Store passengers [/api/travel/:id]
     
 ### POST
 
@@ -186,6 +186,8 @@ Bustop api allows clients to log into app, list lines, passengers, register line
 + trigger_at: Date,
 + speed: Number,
 + point: {lat:Number,lng:Number},
+
+###Models DB
 
 ##Companies
 + _id: String,
