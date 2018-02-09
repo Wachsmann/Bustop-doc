@@ -108,31 +108,7 @@ Bustop api allows clients to log into app, list lines, passengers, register line
 
 #Group Tracking
 
-## Localization [/locale/{line}]
-        
-### POST
-+ Request Headers
-
-        + x-access-token: <token>
-+ Parameters
-    + line - Id of the line locale
-+ Request (application/json)
-    + Attributes
-        + locale (Route)
-        
-+ Response 200 (application/json)
-
-        {
-            "success":"Salvo"
-        }
-        
-+ Response 406 (application/json)
-
-        {
-            "message":<errors>
-        }
-
-## Line state [/line-state]
+## Travel info [/api/travel/store]
 
 ### PUT
 + Request Headers
@@ -140,7 +116,7 @@ Bustop api allows clients to log into app, list lines, passengers, register line
         + x-access-token: <token>
 + Request (application/json)
     + Attributes
-        + state (LineState)    
+        + infos (TravelInfo)
         
 + Response 200 (application/json)
 
@@ -156,9 +132,16 @@ Bustop api allows clients to log into app, list lines, passengers, register line
 
 # Data Structures
 
-## LineState (object)
-+ id (string)
-+ status (number)
+##Device (object)
++ id: String,
++ imei: String,
++ name: String,
++ status: Number
+
+##Driver (object)
++ id: String,
++ name: String,
++ cpf: String,
 
 
 ## Passenger (object)
@@ -167,19 +150,83 @@ Bustop api allows clients to log into app, list lines, passengers, register line
 + cpf (string)
 + avatar (string)
 
-## Route (object)
-+ lat (number)
-+ lng  (number)
-
-
-## Waypoint (object)
-+ location (Route)
-+ stopover (boolean)
-
 ## Line (object)
-+ id (string)
-+ short_description (string)
-+ long_description (string)
-+ route_destiny (Route)
-+ route_origin (Route)
-+ waypoints (array[Waypoint])
++ id: String,
+
++ short_description: String,
++ long_description: String,
+
++ origin_date_time:Date,
++ destiny_date_time:Date,
+
++ recurrency:Number,
+
++ route_destiny: {lat:Number,lng:Number},
++ route_origin: {lat:Number,lng:Number},
++ clients:[{id:String,name:String,brand:String,}],
++ waypoints: [{location:{lat:Number,lng:Number,},stopover:Boolean}],
+
+## Groups
++ id: String,
++ name: String,
++ lines:[String]
++ time_origin: Date,
++ time_destiny:Date
+
+##TravelInfo
++ id_lines:{type:String,required:[true]},
++ cpf:{type:String,required:true,validate: [cpfValidate, "Cpf don't match"],},
++ plate:{type:String,required:[true],validate: [plateValidate, "Plate don't match"],},
++ started_at:{type:Date,required:[true]},
++ passengers:{type:[String]},
+
+##TravelLog
++ id: String,
++ id_travel: String,
++ trigger_at: Date,
++ speed: Number,
++ point: {lat:Number,lng:Number},
+
+##Companies
++ _id: String,
++ fantasy_name: String,
++ social_name: String,
++ phone: Number,
++ cnpj: String,
++ email: String,
+##Clients
++ id: String,
++ type: Number,
++ social_name: String,
++ name: String,
++ phone: Number,
++ cnpj: String,
++ cpf: String,
++ email: String,
++ brand: String,
++ companies: [String],
+
+##Lines
+
++ id: String,
++ short_description: String,
++ long_description: String,
++ route_origin: {lat:Number,lng:Number},
+
++ route_destiny: {lat:Number,lng:Number},
++ waypoints: [{location:{lat:Number,lng:Number},stopover:true}],
++ origin_date_time: Date,
++ destiny_date_time: Date,
++ companies: [String],
++ clients: [{id:String,name:String,brand:String}],
++ recurrency: Number,
++ daysOfWeek: [Number]
+
+##Vehicles
++ _id: String,
++ status: Number,
++ capacity: Number,
++ plate: String,
++ prefix: String,
++ companies: [String],
++ type: {id:String,name:String},
