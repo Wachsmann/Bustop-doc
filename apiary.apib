@@ -7,7 +7,7 @@ Bustop api allows clients to log into app, list lines, passengers, register line
 
 # Group Connection
 
-## Authentication for device [/auth]
+## Authentication for device [/api/auth]
 
 ### POST
 
@@ -21,13 +21,13 @@ Bustop api allows clients to log into app, list lines, passengers, register line
         
             "token": <token>,
         }
-+ Response 406 (application/json)
++ Response 500 (application/json)
 
         {
-            "message":<errors>
+            "error":<message>
         }
         
-## Check Authentication of the device [/]
+## Check Authentication of the device [/api]
 
 ### GET 
 + Request (application/json)
@@ -40,7 +40,7 @@ Bustop api allows clients to log into app, list lines, passengers, register line
         
 # Group Lists
 
-## List Passengers [/passengers/{line}]
+## List Passengers [/api/passenger/{line}]
 + Request Headers
         + x-access-token: <token>
 
@@ -53,36 +53,88 @@ Bustop api allows clients to log into app, list lines, passengers, register line
     + Attributes
         + passengers (array[Passenger])
 
-+ Response 406 (application/json)
++ Response 500 (application/json)
 
         {
-            "warning":<warning>
+            "error":<message>
         }
 
-## List Lines [/lines]
+## List Lines [/api/line]
 
 ### GET
 + Request Headers
 
         + x-access-token: <token>
-        
-+ Request
-    + Attributes
-        + clients (array[string]) - Id of the client 
 
 + Response 200 (application/json)
     + Attributes
         + lines (array[Line])
 
-+ Response 406 (application/json)
++ Response 500 (application/json)
 
         {
-            "warning":<warning>
+            "error":<message>
         }
+## List Vehicles [/api/vehicle]
 
+### GET
++ Request Headers
+
+        + x-access-token: <token>
+
++ Response 200 (application/json)
+    + Attributes
+        + vehicles ([Vehicle])
+
++ Response 500 (application/json)
+
+        {
+            "error":<message>
+        }
+        
+## List Drivers [/api/driver]
+
+### GET
++ Request Headers
+
+        + x-access-token: <token>
+
++ Response 200 (application/json)
+    + Attributes
+        + drivers ([Driver])
+
++ Response 500 (application/json)
+
+        {
+            "error":<message>
+        }
+        
 #Group Store
 
-## Store passengers [/api/travel/:id]
+## Travel info [/api/travel/store]
+
+### PUT
++ Request Headers
+
+        + x-access-token: <token>
+        
++ Request (application/json)
+    + Attributes
+        + infos (TravelInfo)
+        
++ Response 200 (application/json)
+
+        {
+            "success":"Salvo"
+        }
+        
++ Response 500 (application/json)
+
+        {
+            "error":<message>
+        }
+
+## Passengers [/api/passenger/:id]
     
 ### POST
 
@@ -100,35 +152,106 @@ Bustop api allows clients to log into app, list lines, passengers, register line
             "success":"Salvo"
         }
         
-+ Response 406 (application/json)
++ Response 500 (application/json)
 
         {
-            "message":<errors>
+            "error":<message>
         }
+        
+#Group Check
 
-#Group Tracking
+## Vehicles [/api/vehicle/check]
 
-## Travel info [/api/travel/store]
-
-### PUT
+### POST
 + Request Headers
 
         + x-access-token: <token>
+        
 + Request (application/json)
     + Attributes
-        + infos (TravelInfo)
+        + count (string)
         
-+ Response 200 (application/json)
++ Response 200 (application/json)        
 
         {
-            "success":"Salvo"
+            "status": Boolean,
         }
-        
-+ Response 406 (application/json)
++ Response 500 (application/json)
 
         {
-            "message":<errors>
+            "error":<message>
         }
+
+##Drivers [/api/driver/check]
+
+### POST
+
++ Request Headers
+
+        + x-access-token: <token>
+        
++ Request (application/json)
+    + Attributes
+        + count (string)
+        
++ Response 200 (application/json)        
+
+        {
+            "status": Boolean,
+        }
++ Response 500 (application/json)
+
+        {
+            "error":<message>
+        }
+        
+##Passengers [/api/passenger/check]
+
+### POST
+
++ Request Headers
+
+        + x-access-token: <token>
+
++ Request (application/json)
+    + Attributes
+        + count (string)
+        + line (string)
+        
++ Response 200 (application/json)        
+
+        {
+            "status": Boolean,
+        }
++ Response 500 (application/json)
+
+        {
+            "error":<message>
+        }
+        
+##Lines [/api/line/check]
+
+### POST
+
++ Request Headers
+
+        + x-access-token: <token>
+
++ Request (application/json)
+    + Attributes
+        + count (string)
+        
++ Response 200 (application/json)        
+
+        {
+            "status": Boolean,
+        }
++ Response 500 (application/json)
+
+        {
+            "error":<message>
+        }
+
 
 # Data Structures
 
